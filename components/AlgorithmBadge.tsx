@@ -9,39 +9,40 @@ export default function AlgorithmBadge({ status, note }: AlgorithmBadgeProps) {
   const config = {
     optimized: {
       label: "Search Optimized",
-      bg: "#dcfce7",
-      color: "#15803d",
+      bg: "rgba(34,197,94,0.12)",
+      border: "rgba(34,197,94,0.3)",
+      color: "#4ade80",
       dot: "#22c55e",
-      icon: "✓",
     },
     partial: {
       label: "Partially Optimized",
-      bg: "#fef9c3",
-      color: "#a16207",
+      bg: "rgba(234,179,8,0.12)",
+      border: "rgba(234,179,8,0.3)",
+      color: "#facc15",
       dot: "#eab308",
-      icon: "~",
     },
     not_optimized: {
       label: "Not Optimized",
-      bg: "#fee2e2",
-      color: "#b91c1c",
+      bg: "rgba(239,68,68,0.12)",
+      border: "rgba(239,68,68,0.3)",
+      color: "#f87171",
       dot: "#ef4444",
-      icon: "✕",
     },
   };
 
   const c = config[status];
 
   return (
-    <div>
+    <div style={{ maxWidth: "62%" }}>
       <div
         style={{
           display: "inline-flex",
           alignItems: "center",
           gap: "6px",
-          padding: "4px 10px",
+          padding: "5px 11px",
           borderRadius: "99px",
           background: c.bg,
+          border: `1px solid ${c.border}`,
         }}
       >
         <span
@@ -50,30 +51,15 @@ export default function AlgorithmBadge({ status, note }: AlgorithmBadgeProps) {
             height: "7px",
             borderRadius: "50%",
             background: c.dot,
+            boxShadow: `0 0 8px ${c.dot}`,
             flexShrink: 0,
           }}
         />
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            color: c.color,
-            letterSpacing: "0.04em",
-          }}
-        >
+        <span style={{ fontSize: "11px", fontWeight: 700, color: c.color, letterSpacing: "0.04em" }}>
           {c.label}
         </span>
       </div>
-      <p
-        style={{
-          marginTop: "4px",
-          fontSize: "12px",
-          color: "var(--ink-muted)",
-          lineHeight: 1.5,
-        }}
-      >
-        {note}
-      </p>
+      <p style={{ marginTop: "5px", fontSize: "12px", color: "var(--ink-muted)", lineHeight: 1.5 }}>{note}</p>
     </div>
   );
 }

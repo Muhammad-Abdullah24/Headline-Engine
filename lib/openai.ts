@@ -17,16 +17,16 @@ export async function auditHeadline(headline: string): Promise<AuditResult> {
       {
         role: "system",
         content:
-          "You are a LinkedIn positioning expert. You audit LinkedIn headlines with brutal honesty and strategic precision. You score headlines across three dimensions and explain exactly what's weak. Be direct, specific, and useful. Never be generic. Return only valid JSON, no markdown.",
+          "You are a LinkedIn positioning expert. You audit LinkedIn headlines with brutal honesty and strategic precision. You score headlines across three dimensions and explain exactly what's weak. Be direct, specific, and useful. Never be generic. Never use em dashes; use commas, colons, or periods instead. Return only valid JSON, no markdown.",
       },
       {
         role: "user",
         content: `Audit this LinkedIn headline: "${headline}"
 
 Score it across these three dimensions, each out of 10:
-1. Clarity — does it immediately communicate what this person does?
-2. Attraction — does it speak to a specific ICP's pain or goal?
-3. Differentiation — does it sound different from everyone else in this space?
+1. Clarity: does it immediately communicate what this person does?
+2. Attraction: does it speak to a specific ICP's pain or goal?
+3. Differentiation: does it sound different from everyone else in this space?
 
 For each dimension provide:
 - Score (number out of 10)
@@ -60,7 +60,7 @@ export async function generateHeadlines(
       {
         role: "system",
         content:
-          "You are a LinkedIn positioning strategist who understands that a headline is not a job title — it is a positioning statement aimed at a specific ICP. You write headlines that make the right people stop scrolling and think 'I need to talk to this person.' You understand LinkedIn's search algorithm. You never write generic headlines. Return only valid JSON, no markdown.",
+          "You are a LinkedIn positioning strategist who understands that a headline is not a job title. It is a positioning statement aimed at a specific ICP. You write headlines that make the right people stop scrolling and think 'I need to talk to this person.' You understand LinkedIn's search algorithm. You never write generic headlines. Never use em dashes in any headline or text you produce; use commas, colons, or periods instead. Return only valid JSON, no markdown.",
       },
       {
         role: "user",
@@ -98,7 +98,7 @@ Return as a JSON object with a single key "headlines" whose value is an array of
   }]
 }
 
-Make each headline feel meaningfully different — not just reworded. Each should reflect a distinct strategic positioning for that goal.`,
+Make each headline feel meaningfully different, not just reworded. Each should reflect a distinct strategic positioning for that goal.`,
       },
     ],
   });

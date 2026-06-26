@@ -20,10 +20,16 @@ function ScoreBar({
 }) {
   const pct = (score / 10) * 100;
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center">
+    <div>
+      <div className="flex justify-between items-center" style={{ marginBottom: "5px" }}>
         <span
-          style={{ color: "var(--ink-muted)", fontSize: "11px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}
+          style={{
+            color: "var(--ink-muted)",
+            fontSize: "11px",
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+          }}
         >
           {label}
         </span>
@@ -34,22 +40,25 @@ function ScoreBar({
       </div>
       <div
         style={{
-          height: "6px",
-          background: "rgba(26,26,46,0.08)",
+          height: "7px",
+          background: "var(--track)",
           borderRadius: "99px",
           overflow: "hidden",
         }}
       >
         <div
           className="score-bar-fill"
-          style={{
-            height: "100%",
-            width: "0%",
-            background: color,
-            borderRadius: "99px",
-            "--target-width": `${pct}%`,
-            animationDelay: `${delay}ms`,
-          } as React.CSSProperties}
+          style={
+            {
+              height: "100%",
+              width: "0%",
+              background: color,
+              borderRadius: "99px",
+              boxShadow: `0 0 12px ${color}`,
+              "--target-width": `${pct}%`,
+              animationDelay: `${delay}ms`,
+            } as React.CSSProperties
+          }
         />
       </div>
     </div>
@@ -64,36 +73,26 @@ export default function ScoreCard({
 }: ScoreCardProps) {
   const avg = Math.round((clarity + attraction + differentiation) / 3);
 
-  const ringSize = size === "sm" ? 52 : 64;
-  const strokeW = size === "sm" ? 4 : 5;
+  const ringSize = size === "sm" ? 56 : 68;
+  const strokeW = size === "sm" ? 5 : 6;
   const r = (ringSize - strokeW * 2) / 2;
   const circ = 2 * Math.PI * r;
   const filled = circ - (avg / 10) * circ;
 
   const ringColor =
-    avg >= 7
-      ? "var(--teal)"
-      : avg >= 5
-      ? "#f59e0b"
-      : "var(--magenta)";
+    avg >= 7 ? "var(--teal-bright)" : avg >= 5 ? "#fbbf24" : "var(--magenta-bright)";
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: size === "sm" ? "12px" : "16px",
-        alignItems: "center",
-      }}
-    >
+    <div style={{ display: "flex", gap: size === "sm" ? "14px" : "18px", alignItems: "center" }}>
       {/* Circular avg score */}
-      <div style={{ flexShrink: 0 }}>
+      <div style={{ flexShrink: 0, filter: `drop-shadow(0 0 8px ${ringColor})` }}>
         <svg width={ringSize} height={ringSize}>
           <circle
             cx={ringSize / 2}
             cy={ringSize / 2}
             r={r}
             fill="none"
-            stroke="rgba(26,26,46,0.08)"
+            stroke="var(--track)"
             strokeWidth={strokeW}
           />
           <circle
@@ -115,8 +114,8 @@ export default function ScoreCard({
             dominantBaseline="middle"
             textAnchor="middle"
             style={{
-              fontSize: size === "sm" ? "13px" : "15px",
-              fontWeight: 700,
+              fontSize: size === "sm" ? "14px" : "16px",
+              fontWeight: 800,
               fill: "var(--ink)",
             }}
           >
@@ -126,20 +125,10 @@ export default function ScoreCard({
       </div>
 
       {/* Bars */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
-        <ScoreBar label="Clarity" score={clarity} color="var(--teal)" delay={0} />
-        <ScoreBar
-          label="Attraction"
-          score={attraction}
-          color="var(--magenta)"
-          delay={100}
-        />
-        <ScoreBar
-          label="Differentiation"
-          score={differentiation}
-          color="#7c3aed"
-          delay={200}
-        />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "10px" }}>
+        <ScoreBar label="Clarity" score={clarity} color="var(--teal-bright)" delay={0} />
+        <ScoreBar label="Attraction" score={attraction} color="var(--magenta-bright)" delay={120} />
+        <ScoreBar label="Differentiation" score={differentiation} color="#a78bfa" delay={240} />
       </div>
     </div>
   );

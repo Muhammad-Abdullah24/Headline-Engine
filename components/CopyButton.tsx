@@ -21,18 +21,17 @@ export default function CopyButton({ text }: { text: string }) {
         display: "flex",
         alignItems: "center",
         gap: "6px",
-        padding: "8px 16px",
-        borderRadius: "8px",
-        border: copied
-          ? "1.5px solid var(--teal)"
-          : "1.5px solid var(--border)",
-        background: copied ? "var(--teal-light)" : "var(--white)",
-        color: copied ? "var(--teal-dark)" : "var(--ink)",
+        padding: "9px 18px",
+        borderRadius: "10px",
+        border: copied ? "1.5px solid var(--teal)" : "1.5px solid var(--border)",
+        background: copied ? "var(--teal-light)" : "var(--glass-strong)",
+        color: copied ? "var(--teal-bright)" : "var(--ink)",
         fontSize: "13px",
         fontWeight: 600,
         cursor: "pointer",
         transition: "all 0.2s ease",
         whiteSpace: "nowrap",
+        backdropFilter: "blur(8px)",
       }}
     >
       {copied ? (

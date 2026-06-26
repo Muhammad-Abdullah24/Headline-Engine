@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -10,7 +10,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "LinkedIn Headline Positioning Engine | Hirenum",
   description:
-    "Stop guessing. Start positioning. Audit your current LinkedIn headline and generate 5 strategic variants engineered for your ICP — free by Hirenum.",
+    "Stop guessing. Start positioning. Audit your current LinkedIn headline and generate 5 strategic variants engineered for your ICP. Free by Hirenum.",
   openGraph: {
     title: "LinkedIn Headline Positioning Engine | Hirenum",
     description:
@@ -20,13 +20,22 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#06060d",
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const themeScript = `(function(){try{var t=localStorage.getItem('hirenum-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
+
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );

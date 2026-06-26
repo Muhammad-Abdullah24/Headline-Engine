@@ -12,81 +12,65 @@ const GOAL_ICONS: Record<string, string> = {
   Partnerships: "🤝",
 };
 
-const GOAL_COLORS: Record<string, { bg: string; accent: string; light: string }> = {
-  "Inbound Leads": { bg: "var(--teal)", accent: "var(--teal-dark)", light: "var(--teal-light)" },
-  "Speaking Opportunities": { bg: "#7c3aed", accent: "#6d28d9", light: "#f3e8ff" },
-  "Media & Press": { bg: "#dc2626", accent: "#b91c1c", light: "#fee2e2" },
-  "Recruiting & Talent": { bg: "#d97706", accent: "#b45309", light: "#fef3c7" },
-  Partnerships: { bg: "var(--magenta)", accent: "var(--magenta-dark)", light: "var(--magenta-light)" },
+type GoalColor = { from: string; to: string; glow: string; tint: string };
+
+const GOAL_COLORS: Record<string, GoalColor> = {
+  "Inbound Leads": { from: "#1bb8bd", to: "#2fe9ef", glow: "rgba(47,233,239,0.4)", tint: "rgba(47,233,239,0.08)" },
+  "Speaking Opportunities": { from: "#7c3aed", to: "#a78bfa", glow: "rgba(139,92,246,0.4)", tint: "rgba(139,92,246,0.1)" },
+  "Media & Press": { from: "#dc2626", to: "#f87171", glow: "rgba(248,113,113,0.4)", tint: "rgba(248,113,113,0.08)" },
+  "Recruiting & Talent": { from: "#d97706", to: "#fbbf24", glow: "rgba(251,191,36,0.4)", tint: "rgba(251,191,36,0.08)" },
+  Partnerships: { from: "#dc0078", to: "#ff3da6", glow: "rgba(255,61,166,0.4)", tint: "rgba(255,61,166,0.08)" },
 };
 
-function getColor(goal: string) {
+function getColor(goal: string): GoalColor {
   return (
     GOAL_COLORS[goal] || {
-      bg: "var(--teal)",
-      accent: "var(--teal-dark)",
-      light: "var(--teal-light)",
+      from: "#1bb8bd",
+      to: "#2fe9ef",
+      glow: "rgba(47,233,239,0.4)",
+      tint: "rgba(47,233,239,0.08)",
     }
   );
 }
 
-export default function HeadlineResults({
-  variants,
-}: {
-  variants: HeadlineVariant[];
-}) {
+export default function HeadlineResults({ variants }: { variants: HeadlineVariant[] }) {
   return (
     <div>
       {/* Section header */}
-      <div style={{ textAlign: "center", marginBottom: "36px" }}>
+      <div style={{ textAlign: "center", marginBottom: "40px" }}>
         <div
+          className="step-badge"
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
             background: "var(--teal-light)",
-            color: "var(--teal-dark)",
-            padding: "4px 16px",
-            borderRadius: "99px",
-            fontSize: "11px",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            marginBottom: "14px",
+            color: "var(--teal-bright)",
+            border: "1px solid rgba(47,233,239,0.25)",
+            marginBottom: "16px",
           }}
         >
           Step 3 • Your Positioning Suite
         </div>
         <h2
           style={{
-            fontSize: "28px",
+            fontSize: "clamp(26px, 4vw, 36px)",
             fontWeight: 900,
             color: "var(--ink)",
-            lineHeight: 1.15,
-            marginBottom: "8px",
+            lineHeight: 1.12,
+            marginBottom: "10px",
+            letterSpacing: "-0.02em",
           }}
         >
           5 headlines. Each one a{" "}
-          <span
-            style={{
-              background: "linear-gradient(135deg, var(--teal), var(--magenta))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            different weapon.
-          </span>
+          <span className="gradient-text">different weapon.</span>
         </h2>
-        <p style={{ fontSize: "16px", color: "var(--ink-muted)", maxWidth: "480px", margin: "0 auto" }}>
+        <p style={{ fontSize: "16px", color: "var(--ink-muted)", maxWidth: "500px", margin: "0 auto", lineHeight: 1.6 }}>
           Each headline positions you for a specific goal. Pick the one that matches where you are right now.
         </p>
       </div>
 
       {/* Variants */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
         {variants.map((v, i) => {
-          const colors = getColor(v.goal);
+          const c = getColor(v.goal);
           const icon = GOAL_ICONS[v.goal] || "✦";
           const avgScore = Math.round(
             (v.scores.clarity + v.scores.attraction + v.scores.differentiation) / 3
@@ -95,105 +79,68 @@ export default function HeadlineResults({
           return (
             <div
               key={i}
-              className={`fade-up fade-up-delay-${i + 1}`}
-              style={{
-                background: "var(--white)",
-                borderRadius: "20px",
-                border: "1.5px solid var(--border)",
-                overflow: "hidden",
-                boxShadow: "0 2px 24px rgba(26,26,46,0.06)",
-              }}
+              className={`glass-card glass-card-hover fade-up fade-up-delay-${Math.min(i + 1, 5)}`}
             >
               {/* Goal header bar */}
               <div
                 style={{
-                  background: colors.bg,
-                  padding: "14px 24px",
+                  background: `linear-gradient(120deg, ${c.from}, ${c.to})`,
+                  padding: "16px 26px",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  boxShadow: `0 8px 30px -10px ${c.glow}`,
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{ fontSize: "18px" }}>{icon}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <span style={{ fontSize: "20px" }}>{icon}</span>
                   <div>
                     <p
                       style={{
                         fontSize: "10px",
                         fontWeight: 700,
-                        letterSpacing: "0.1em",
+                        letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.7)",
+                        color: "rgba(255,255,255,0.75)",
                         marginBottom: "2px",
                       }}
                     >
                       Optimized for
                     </p>
-                    <p
-                      style={{
-                        fontSize: "15px",
-                        fontWeight: 800,
-                        color: "white",
-                      }}
-                    >
-                      {v.goal}
-                    </p>
+                    <p style={{ fontSize: "16px", fontWeight: 800, color: "white" }}>{v.goal}</p>
                   </div>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      fontSize: "24px",
-                      fontWeight: 900,
-                      color: "white",
-                      lineHeight: 1,
-                    }}
-                  >
+                  <div style={{ fontSize: "26px", fontWeight: 900, color: "white", lineHeight: 1 }}>
                     {avgScore}
-                    <span style={{ fontSize: "12px", opacity: 0.6 }}>/10</span>
+                    <span style={{ fontSize: "12px", opacity: 0.7 }}>/10</span>
                   </div>
-                  <div
-                    style={{
-                      fontSize: "10px",
-                      color: "rgba(255,255,255,0.7)",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Overall
+                  <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.75)", fontWeight: 600, letterSpacing: "0.06em" }}>
+                    OVERALL
                   </div>
                 </div>
               </div>
 
               {/* Content */}
-              <div style={{ padding: "24px" }}>
+              <div style={{ padding: "26px" }}>
                 {/* Headline text */}
                 <div
                   style={{
-                    padding: "16px 20px",
-                    borderRadius: "12px",
-                    background: colors.light,
-                    border: `1px solid ${colors.bg}22`,
-                    marginBottom: "16px",
+                    padding: "18px 22px",
+                    borderRadius: "14px",
+                    background: c.tint,
+                    border: "1px solid var(--border)",
+                    marginBottom: "18px",
                   }}
                 >
-                  <p
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 700,
-                      color: "var(--ink)",
-                      lineHeight: 1.4,
-                      marginBottom: "8px",
-                    }}
-                  >
-                    "{v.headline}"
+                  <p style={{ fontSize: "18px", fontWeight: 700, color: "var(--ink)", lineHeight: 1.45, marginBottom: "8px" }}>
+                    &ldquo;{v.headline}&rdquo;
                   </p>
-                  <p style={{ fontSize: "13px", color: "var(--ink-muted)", lineHeight: 1.5 }}>
-                    {v.explanation}
-                  </p>
+                  <p style={{ fontSize: "13px", color: "var(--ink-muted)", lineHeight: 1.55 }}>{v.explanation}</p>
                 </div>
 
                 {/* Score card */}
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "18px" }}>
                   <ScoreCard
                     clarity={v.scores.clarity}
                     attraction={v.scores.attraction}
@@ -205,58 +152,39 @@ export default function HeadlineResults({
                 {/* ICP Mirror */}
                 <div
                   style={{
-                    padding: "12px 16px",
-                    borderRadius: "10px",
-                    background: "#1a1a2e",
-                    marginBottom: "14px",
+                    padding: "14px 18px",
+                    borderRadius: "13px",
+                    background: "var(--inset-panel)",
+                    border: "1px solid var(--border)",
+                    marginBottom: "16px",
                     display: "flex",
-                    gap: "10px",
+                    gap: "12px",
                     alignItems: "flex-start",
                   }}
                 >
-                  <span style={{ fontSize: "16px", flexShrink: 0, marginTop: "1px" }}>
-                    🧠
-                  </span>
+                  <span style={{ fontSize: "18px", flexShrink: 0, marginTop: "1px" }}>🧠</span>
                   <div>
                     <p
                       style={{
                         fontSize: "10px",
                         fontWeight: 700,
-                        letterSpacing: "0.08em",
+                        letterSpacing: "0.1em",
                         textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.4)",
-                        marginBottom: "4px",
+                        color: "var(--ink-light)",
+                        marginBottom: "5px",
                       }}
                     >
                       What your ICP thinks when they read this
                     </p>
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        color: "rgba(255,255,255,0.9)",
-                        fontStyle: "italic",
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      "{v.icp_mirror}"
+                    <p style={{ fontSize: "14px", color: "var(--ink)", fontStyle: "italic", lineHeight: 1.55 }}>
+                      &ldquo;{v.icp_mirror}&rdquo;
                     </p>
                   </div>
                 </div>
 
                 {/* Algorithm badge + Copy */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                  }}
-                >
-                  <AlgorithmBadge
-                    status={v.algorithm.status}
-                    note={v.algorithm.note}
-                  />
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
+                  <AlgorithmBadge status={v.algorithm.status} note={v.algorithm.note} />
                   <CopyButton text={v.headline} />
                 </div>
               </div>

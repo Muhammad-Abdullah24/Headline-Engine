@@ -59,60 +59,32 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
 
   const isValid = form.role && form.industry && form.icp && form.value && form.goal;
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "13px 16px",
-    borderRadius: "10px",
-    border: "1.5px solid var(--border)",
-    background: "#fafaf9",
-    fontSize: "14px",
-    color: "var(--ink)",
-    outline: "none",
-    fontFamily: "inherit",
-    transition: "border-color 0.2s",
-  };
-
   const labelStyle: React.CSSProperties = {
     display: "block",
     fontSize: "13px",
     fontWeight: 700,
     color: "var(--ink)",
-    marginBottom: "6px",
+    marginBottom: "7px",
     letterSpacing: "0.01em",
   };
 
   const hintStyle: React.CSSProperties = {
     fontSize: "12px",
     color: "var(--ink-light)",
-    marginTop: "4px",
+    marginTop: "5px",
   };
 
   return (
-    <div
-      style={{
-        background: "var(--white)",
-        borderRadius: "20px",
-        padding: "32px",
-        border: "1.5px solid var(--border)",
-        boxShadow: "0 2px 24px rgba(26,26,46,0.06)",
-      }}
-    >
+    <div className="glass-card glass-card-hover" style={{ padding: "34px" }}>
       {/* Header */}
       <div style={{ marginBottom: "28px" }}>
         <div
+          className="step-badge"
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
             background: "var(--teal-light)",
-            color: "var(--teal-dark)",
-            padding: "4px 12px",
-            borderRadius: "99px",
-            fontSize: "11px",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            marginBottom: "12px",
+            color: "var(--teal-bright)",
+            border: "1px solid rgba(47,233,239,0.25)",
+            marginBottom: "14px",
           }}
         >
           <span>Step 2</span>
@@ -121,17 +93,18 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
         </div>
         <h2
           style={{
-            fontSize: "22px",
+            fontSize: "26px",
             fontWeight: 800,
             color: "var(--ink)",
             lineHeight: 1.2,
             marginBottom: "8px",
+            letterSpacing: "-0.01em",
           }}
         >
           Who are you trying to attract?
         </h2>
         <p style={{ fontSize: "15px", color: "var(--ink-muted)", lineHeight: 1.6 }}>
-          This isn't about you — it's about who needs to find you. Five questions. Thirty seconds.
+          This isn&apos;t about you. It&apos;s about who needs to find you. Five questions. Thirty seconds.
         </p>
       </div>
 
@@ -139,33 +112,30 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
         {/* Role */}
         <div>
           <label style={labelStyle}>
-            What do you do? <span style={{ color: "var(--magenta)" }}>*</span>
+            What do you do? <span style={{ color: "var(--magenta-bright)" }}>*</span>
           </label>
           <input
+            className="field"
             type="text"
             value={form.role}
             onChange={(e) => update("role", e.target.value)}
             placeholder="e.g. B2B Sales Consultant, SaaS Founder, Executive Coach"
-            style={inputStyle}
-            onFocus={(e) => (e.target.style.borderColor = "var(--teal)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
           />
-          <p style={hintStyle}>Your role or function — not your job title.</p>
+          <p style={hintStyle}>Your role or function, not your job title.</p>
         </div>
 
         {/* Industry */}
         <div>
           <label style={labelStyle}>
-            Your industry <span style={{ color: "var(--magenta)" }}>*</span>
+            Your industry <span style={{ color: "var(--magenta-bright)" }}>*</span>
           </label>
           <select
+            className="field"
             value={form.industry}
             onChange={(e) => update("industry", e.target.value)}
-            style={{ ...inputStyle, cursor: "pointer", appearance: "auto" }}
-            onFocus={(e) => (e.target.style.borderColor = "var(--teal)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+            style={{ cursor: "pointer" }}
           >
-            <option value="">Select your industry...</option>
+            <option value="">Select your industry…</option>
             {INDUSTRIES.map((ind) => (
               <option key={ind} value={ind}>
                 {ind}
@@ -177,56 +147,42 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
         {/* ICP */}
         <div>
           <label style={labelStyle}>
-            Who are you trying to attract? <span style={{ color: "var(--magenta)" }}>*</span>
+            Who are you trying to attract? <span style={{ color: "var(--magenta-bright)" }}>*</span>
           </label>
           <input
+            className="field"
             type="text"
             value={form.icp}
             onChange={(e) => update("icp", e.target.value)}
             placeholder='e.g. "B2B SaaS founders scaling from $1M to $10M ARR"'
-            style={inputStyle}
-            onFocus={(e) => (e.target.style.borderColor = "var(--teal)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
           />
-          <p style={hintStyle}>
-            Be specific. The more precise, the more powerful your headline.
-          </p>
+          <p style={hintStyle}>Be specific. The more precise, the more powerful your headline.</p>
         </div>
 
         {/* Value */}
         <div>
           <label style={labelStyle}>
-            What outcome do you create for them? <span style={{ color: "var(--magenta)" }}>*</span>
+            What outcome do you create for them? <span style={{ color: "var(--magenta-bright)" }}>*</span>
           </label>
           <input
+            className="field"
             type="text"
             value={form.value}
             onChange={(e) => update("value", e.target.value)}
             placeholder='e.g. "I help them build sales pipelines that close without cold calling"'
-            style={inputStyle}
-            onFocus={(e) => (e.target.style.borderColor = "var(--teal)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
           />
-          <p style={hintStyle}>
-            Result-first. What changes for them after working with you?
-          </p>
+          <p style={hintStyle}>Result-first. What changes for them after working with you?</p>
         </div>
 
         {/* Goal */}
         <div>
           <label style={labelStyle}>
-            Your primary headline goal <span style={{ color: "var(--magenta)" }}>*</span>
+            Your primary headline goal <span style={{ color: "var(--magenta-bright)" }}>*</span>
           </label>
-          <p style={{ ...hintStyle, marginBottom: "10px", marginTop: 0 }}>
-            We'll generate 5 variants — one for each goal — but which matters most to you right now?
+          <p style={{ ...hintStyle, marginBottom: "12px", marginTop: 0 }}>
+            We&apos;ll generate 5 variants, one for each goal, but which matters most right now?
           </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "8px",
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px" }}>
             {GOALS.map((g) => {
               const isSelected = form.goal === g;
               return (
@@ -235,33 +191,29 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
                   type="button"
                   onClick={() => update("goal", g)}
                   style={{
-                    padding: "12px 14px",
-                    borderRadius: "10px",
-                    border: isSelected
-                      ? "2px solid var(--teal)"
-                      : "1.5px solid var(--border)",
-                    background: isSelected ? "var(--teal-light)" : "var(--white)",
+                    padding: "13px 15px",
+                    borderRadius: "12px",
+                    border: isSelected ? "1.5px solid var(--teal)" : "1.5px solid var(--border)",
+                    background: isSelected
+                      ? "linear-gradient(135deg, rgba(47,233,239,0.14), rgba(47,233,239,0.04))"
+                      : "var(--glass-input)",
                     cursor: "pointer",
                     textAlign: "left",
-                    transition: "all 0.15s",
+                    transition: "all 0.2s",
+                    boxShadow: isSelected ? "0 0 0 4px rgba(47,233,239,0.08)" : "none",
                   }}
                 >
                   <div
                     style={{
                       fontSize: "13px",
                       fontWeight: 700,
-                      color: isSelected ? "var(--teal-dark)" : "var(--ink)",
-                      marginBottom: "2px",
+                      color: isSelected ? "var(--teal-bright)" : "var(--ink)",
+                      marginBottom: "3px",
                     }}
                   >
                     {g}
                   </div>
-                  <div
-                    style={{
-                      fontSize: "11px",
-                      color: isSelected ? "var(--teal)" : "var(--ink-light)",
-                    }}
-                  >
+                  <div style={{ fontSize: "11px", color: isSelected ? "var(--teal)" : "var(--ink-light)" }}>
                     {GOAL_DESCRIPTIONS[g]}
                   </div>
                 </button>
@@ -275,16 +227,16 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
           type="button"
           onClick={() => isValid && onSubmit(form)}
           disabled={loading || !isValid}
+          className="btn-shine"
           style={{
             width: "100%",
-            padding: "16px",
-            borderRadius: "12px",
+            padding: "17px",
+            borderRadius: "14px",
             background:
               loading || !isValid
-                ? "rgba(26,26,46,0.08)"
-                : "linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%)",
-            color:
-              loading || !isValid ? "var(--ink-light)" : "white",
+                ? "rgba(255,255,255,0.06)"
+                : "linear-gradient(120deg, var(--teal), var(--teal-bright))",
+            color: loading || !isValid ? "var(--ink-light)" : "#04222a",
             border: "none",
             fontSize: "16px",
             fontWeight: 800,
@@ -292,10 +244,11 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
             transition: "all 0.2s",
             letterSpacing: "0.02em",
             marginTop: "8px",
+            boxShadow: loading || !isValid ? "none" : "0 12px 32px -10px var(--teal-glow)",
           }}
         >
           {loading ? (
-            <span className="pulse-teal">Generating your headlines...</span>
+            <span className="pulse-teal">Generating your headlines…</span>
           ) : (
             "Generate 5 Strategic Headlines →"
           )}
