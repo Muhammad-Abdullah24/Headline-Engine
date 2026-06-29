@@ -129,7 +129,7 @@ export default function HomePage() {
             style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="Hirenum" style={{ height: "26px", width: "auto", display: "block" }} />
+            <img src="/hirenum-logo.png" alt="Hirenum" style={{ height: "26px", width: "auto", display: "block" }} />
             <span
               className="hidden sm:block"
               style={{
@@ -436,7 +436,7 @@ export default function HomePage() {
           >
             <div style={{ maxWidth: "300px" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="Hirenum" style={{ height: "26px", width: "auto", display: "block", marginBottom: "16px" }} />
+              <img src="/hirenum-logo.png" alt="Hirenum" style={{ height: "26px", width: "auto", display: "block", marginBottom: "16px" }} />
               <p style={{ fontSize: "14px", color: "var(--ink-muted)", lineHeight: 1.6 }}>
                 We Brand People. A LinkedIn personal-branding agency for founders, C-suites, and
                 professionals who refuse to blend in.
