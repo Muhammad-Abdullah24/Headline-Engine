@@ -5,21 +5,36 @@ import { AuditResult, HeadlineVariant } from "@/lib/types";
 interface ShareNudgeProps {
   auditResult: AuditResult;
   bestVariant: HeadlineVariant;
-  currentHeadline: string;
+  // The best variant scored through the SAME rubric as the user's original
+  // headline. Null while loading or if the re-audit failed.
+  newAudit: AuditResult | null;
+  loading: boolean;
 }
 
-export default function ShareNudge({ auditResult, bestVariant }: ShareNudgeProps) {
+const avg = (s: { clarity: number; attraction: number; differentiation: number }) =>
+  Math.round((s.clarity + s.attraction + s.differentiation) / 3);
+
+export default function ShareNudge({ auditResult, bestVariant, newAudit, loading }: ShareNudgeProps) {
   const [copied, setCopied] = useState(false);
 
-  const oldScore = Math.round(
-    (auditResult.clarity.score + auditResult.attraction.score + auditResult.differentiation.score) / 3
-  );
+  const oldScore = avg({
+    clarity: auditResult.clarity.score,
+    attraction: auditResult.attraction.score,
+    differentiation: auditResult.differentiation.score,
+  });
 
-  const newScore = Math.round(
-    (bestVariant.scores.clarity + bestVariant.scores.attraction + bestVariant.scores.differentiation) / 3
-  );
+  // Prefer the honest re-audit (same rubric as oldScore). Only if it could not
+  // be obtained do we fall back to the variant's self-reported scores.
+  const newScore = newAudit
+    ? avg({
+        clarity: newAudit.clarity.score,
+        attraction: newAudit.attraction.score,
+        differentiation: newAudit.differentiation.score,
+      })
+    : avg(bestVariant.scores);
 
   const improvement = newScore - oldScore;
+  const ready = !loading;
 
   const sharePost = `I just audited my LinkedIn headline and the results were... humbling.
 
@@ -73,11 +88,22 @@ Try it free → hirenum.com/headline`;
           <h3 style={{ fontSize: "22px", fontWeight: 900, color: "var(--ink)", lineHeight: 1.2 }}>
             Old: <span style={{ color: "var(--magenta-bright)" }}>{oldScore}/10</span>{" "}
             <span style={{ color: "var(--ink-light)" }}>→</span>{" "}
-            <span className="gradient-text">New best: {newScore}/10</span>
+            {ready ? (
+              <span className="gradient-text">New best: {newScore}/10</span>
+            ) : (
+              <span className="pulse-teal" style={{ color: "var(--ink-light)" }}>
+                scoring…
+              </span>
+            )}
           </h3>
-          {improvement > 0 && (
+          {ready && improvement > 0 && (
             <p style={{ fontSize: "14px", color: "var(--ink-muted)", marginTop: "6px" }}>
               That&apos;s a {improvement}-point positioning upgrade.
+            </p>
+          )}
+          {ready && improvement <= 0 && (
+            <p style={{ fontSize: "14px", color: "var(--ink-muted)", marginTop: "6px" }}>
+              Already strong. These variants sharpen the positioning for each goal.
             </p>
           )}
         </div>
@@ -85,14 +111,18 @@ Try it free → hirenum.com/headline`;
           style={{
             padding: "9px 20px",
             borderRadius: "99px",
-            background: "linear-gradient(120deg, var(--teal), var(--teal-bright))",
-            color: "#04222a",
+            background:
+              ready && improvement > 0
+                ? "linear-gradient(120deg, var(--teal), var(--teal-bright))"
+                : "var(--glass-strong)",
+            color: ready && improvement > 0 ? "#04222a" : "var(--ink-muted)",
             fontSize: "14px",
             fontWeight: 800,
-            boxShadow: "0 8px 24px -8px var(--teal-glow)",
+            boxShadow: ready && improvement > 0 ? "0 8px 24px -8px var(--teal-glow)" : "none",
+            border: ready && improvement > 0 ? "none" : "1px solid var(--border)",
           }}
         >
-          +{improvement > 0 ? `${improvement}` : "?"} points
+          {!ready ? "scoring…" : improvement > 0 ? `+${improvement} points` : `${newScore}/10`}
         </div>
       </div>
 

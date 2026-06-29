@@ -23,12 +23,25 @@ const FEATURES = [
   "Share-Ready Scorecard",
 ];
 
+const avgScore = (s: { clarity: number; attraction: number; differentiation: number }) =>
+  (s.clarity + s.attraction + s.differentiation) / 3;
+
+// Pick the strongest variant by its own self-reported scores. (Relative ranking
+// among the model's own outputs is fine; the honest *absolute* number for the
+// share card comes from re-auditing this headline below.)
+const pickBest = (vs: HeadlineVariant[]): HeadlineVariant | null =>
+  vs.length ? vs.reduce((best, v) => (avgScore(v.scores) > avgScore(best.scores) ? v : best)) : null;
+
 export default function HomePage() {
   const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
   const [auditedHeadline, setAuditedHeadline] = useState("");
   const [variants, setVariants] = useState<HeadlineVariant[] | null>(null);
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState("");
+  // Honest before/after: the best generated headline scored through the SAME
+  // audit rubric as the user's original, so the share card compares like with like.
+  const [bestAudit, setBestAudit] = useState<AuditResult | null>(null);
+  const [bestAuditLoading, setBestAuditLoading] = useState(false);
 
   const handleAuditComplete = (result: AuditResult, headline: string) => {
     setAuditResult(result);
@@ -39,6 +52,7 @@ export default function HomePage() {
     setGenerating(true);
     setGenerateError("");
     setVariants(null);
+    setBestAudit(null);
 
     try {
       const res = await fetch("/api/generate", {
@@ -48,13 +62,30 @@ export default function HomePage() {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Generation failed");
-      setVariants(json);
+      const variantsData = json as HeadlineVariant[];
+      setVariants(variantsData);
       setTimeout(() => {
         document.getElementById("results-section")?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
       }, 100);
+
+      // Re-audit the best variant for an apples-to-apples before/after score.
+      // Non-blocking: results render immediately; the share card fills in when ready.
+      const best = pickBest(variantsData);
+      if (best) {
+        setBestAuditLoading(true);
+        fetch("/api/audit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ headline: best.headline }),
+        })
+          .then(async (r) => (r.ok ? ((await r.json()) as AuditResult) : null))
+          .then((a) => setBestAudit(a))
+          .catch(() => setBestAudit(null))
+          .finally(() => setBestAuditLoading(false));
+      }
     } catch (e: unknown) {
       setGenerateError(e instanceof Error ? e.message : "Something went wrong. Try again.");
     } finally {
@@ -62,13 +93,7 @@ export default function HomePage() {
     }
   };
 
-  const bestVariant = variants
-    ? variants.reduce((best, v) => {
-        const bAvg = (best.scores.clarity + best.scores.attraction + best.scores.differentiation) / 3;
-        const vAvg = (v.scores.clarity + v.scores.attraction + v.scores.differentiation) / 3;
-        return vAvg > bAvg ? v : best;
-      })
-    : null;
+  const bestVariant = variants ? pickBest(variants) : null;
 
   // Drive the sticky stepper rail
   const currentStep = variants ? 4 : generating ? 3 : auditResult ? 2 : 1;
@@ -385,7 +410,12 @@ export default function HomePage() {
 
               {variants && auditResult && bestVariant && (
                 <div className="fade-up">
-                  <ShareNudge auditResult={auditResult} bestVariant={bestVariant} currentHeadline={auditedHeadline} />
+                  <ShareNudge
+                    auditResult={auditResult}
+                    bestVariant={bestVariant}
+                    newAudit={bestAudit}
+                    loading={bestAuditLoading}
+                  />
                 </div>
               )}
             </div>
