@@ -227,30 +227,13 @@ export default function HeadlineForm({ onSubmit, loading }: HeadlineFormProps) {
           type="button"
           onClick={() => isValid && onSubmit(form)}
           disabled={loading || !isValid}
-          className="btn-shine"
-          style={{
-            width: "100%",
-            padding: "17px",
-            borderRadius: "14px",
-            background:
-              loading || !isValid
-                ? "rgba(255,255,255,0.06)"
-                : "linear-gradient(120deg, var(--teal), var(--teal-bright))",
-            color: loading || !isValid ? "var(--ink-light)" : "#04222a",
-            border: "none",
-            fontSize: "16px",
-            fontWeight: 800,
-            cursor: loading || !isValid ? "not-allowed" : "pointer",
-            transition: "all 0.2s",
-            letterSpacing: "0.02em",
-            marginTop: "8px",
-            boxShadow: loading || !isValid ? "none" : "0 12px 32px -10px var(--teal-glow)",
-          }}
+          className="btn btn-primary btn-block"
+          style={{ marginTop: "8px" }}
         >
           {loading ? (
             <span className="pulse-teal">Generating your headlines…</span>
           ) : (
-            "Generate 5 Strategic Headlines →"
+            "Generate 5 Strategic Headlines"
           )}
         </button>
       </div>

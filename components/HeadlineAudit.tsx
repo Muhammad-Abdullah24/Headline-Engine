@@ -105,25 +105,9 @@ export default function HeadlineAudit({ onAuditComplete }: HeadlineAuditProps) {
           <button
             onClick={handleAudit}
             disabled={loading || !headline.trim()}
-            className="btn-shine"
-            style={{
-              padding: "11px 26px",
-              borderRadius: "11px",
-              background:
-                loading || !headline.trim()
-                  ? "rgba(255,255,255,0.06)"
-                  : "linear-gradient(120deg, var(--magenta), var(--magenta-bright))",
-              color: loading || !headline.trim() ? "var(--ink-light)" : "white",
-              border: "none",
-              fontSize: "14px",
-              fontWeight: 700,
-              cursor: loading || !headline.trim() ? "not-allowed" : "pointer",
-              transition: "all 0.2s",
-              boxShadow:
-                loading || !headline.trim() ? "none" : "0 8px 24px -8px var(--magenta-glow)",
-            }}
+            className="btn btn-magenta btn-sm"
           >
-            {loading ? <span className="pulse-teal">Auditing…</span> : "Audit My Headline →"}
+            {loading ? <span className="pulse-teal">Auditing…</span> : "Audit My Headline"}
           </button>
         </div>
       </div>

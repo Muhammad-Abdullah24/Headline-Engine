@@ -161,20 +161,7 @@ Try it free → hirenum.com/headline`;
         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
           <button
             onClick={handleCopy}
-            className="btn-shine"
-            style={{
-              padding: "12px 24px",
-              borderRadius: "12px",
-              background: copied
-                ? "linear-gradient(120deg, var(--teal), var(--teal-bright))"
-                : "var(--ink)",
-              color: copied ? "#04222a" : "var(--bg)",
-              border: "none",
-              fontSize: "14px",
-              fontWeight: 700,
-              cursor: "pointer",
-              transition: "all 0.2s",
-            }}
+            className={`btn btn-sm ${copied ? "btn-primary" : "btn-dark"}`}
           >
             {copied ? "✓ Copied!" : "Copy LinkedIn Post"}
           </button>
@@ -182,19 +169,7 @@ Try it free → hirenum.com/headline`;
             href="https://www.linkedin.com/company/hirenum"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              padding: "12px 24px",
-              borderRadius: "12px",
-              background: "var(--teal-light)",
-              color: "var(--teal-bright)",
-              border: "1.5px solid rgba(47,233,239,0.3)",
-              fontSize: "14px",
-              fontWeight: 700,
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
+            className="btn btn-ghost btn-sm"
           >
             Follow @Hirenum
           </a>

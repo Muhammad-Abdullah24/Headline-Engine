@@ -403,6 +403,137 @@ body {
 }
 
 /* ============================================================
+   BUTTON SYSTEM (glossy depth / pill)
+   Tactile: vertical gradient + inner top sheen + glass reflection,
+   gentle lift on hover, real press on click. GPU-only transforms.
+   ============================================================ */
+.btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sora), var(--font-inter), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0;
+  padding: 14px 28px;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--btn-ink, #04222a);
+  background: var(--btn-bg, var(--glass-strong));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.16), var(--btn-shadow, 0 6px 16px -8px rgba(0, 0, 0, 0.4));
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease,
+    filter 0.25s ease, color 0.2s ease, border-color 0.25s ease;
+}
+
+/* Glass reflection: bright sheen across the top half */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.32),
+    rgba(255, 255, 255, 0.05) 42%,
+    transparent 62%
+  );
+  opacity: var(--btn-gloss, 1);
+  pointer-events: none;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.05) brightness(1.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 5px rgba(0, 0, 0, 0.16),
+    var(--btn-shadow-hover, var(--btn-shadow, 0 10px 24px -8px rgba(0, 0, 0, 0.45)));
+}
+.btn:active {
+  transform: translateY(1px) scale(0.985);
+  filter: brightness(0.98);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.28),
+    var(--btn-shadow, 0 3px 10px -6px rgba(0, 0, 0, 0.4));
+  transition-duration: 0.06s;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--teal-bright);
+  outline-offset: 3px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  background: var(--glass-strong);
+  color: var(--ink-light);
+  box-shadow: inset 0 0 0 1px var(--border);
+  transform: none;
+  filter: none;
+}
+.btn:disabled::before,
+.btn[aria-disabled="true"]::before {
+  display: none;
+}
+
+/* ── Variants (vertical gradients = glossy depth) ── */
+.btn-primary {
+  --btn-ink: #04222a;
+  --btn-bg: linear-gradient(180deg, var(--teal-bright), var(--teal) 52%, var(--teal-dark));
+  --btn-shadow: 0 10px 26px -10px var(--teal-glow);
+  --btn-shadow-hover: 0 18px 40px -10px var(--teal-glow);
+}
+.btn-magenta {
+  --btn-ink: #fff;
+  --btn-bg: linear-gradient(180deg, var(--magenta-bright), var(--magenta) 52%, var(--magenta-dark));
+  --btn-shadow: 0 10px 26px -10px var(--magenta-glow);
+  --btn-shadow-hover: 0 18px 40px -10px var(--magenta-glow);
+}
+.btn-dark {
+  --btn-ink: var(--bg);
+  --btn-bg: var(--ink);
+  --btn-gloss: 0.22;
+  --btn-shadow: 0 10px 26px -14px rgba(0, 0, 0, 0.6);
+  --btn-shadow-hover: 0 18px 38px -12px rgba(0, 0, 0, 0.55);
+}
+.btn-ghost {
+  --btn-ink: var(--ink);
+  --btn-bg: var(--glass-strong);
+  --btn-gloss: 0.4;
+  --btn-shadow: none;
+  --btn-shadow-hover: 0 12px 28px -16px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.btn-ghost:hover {
+  border-color: var(--border-strong);
+}
+
+/* ── Sizes ── */
+.btn-sm {
+  padding: 9px 20px;
+  font-size: 13px;
+  gap: 7px;
+}
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 16px;
+}
+.btn-block {
+  width: 100%;
+  padding: 17px;
+  font-size: 16px;
+}
+
+/* ============================================================
    SCORE BAR + RING (kept from before)
    ============================================================ */
 @keyframes fillBar {
@@ -627,10 +758,43 @@ body {
   border-radius: 99px;
 }
 
+/* Footer social column */
+.footer-social-heading {
+  transition: color 0.2s ease;
+}
+.footer-social-heading:hover {
+  color: var(--ink);
+}
+
+.social-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.social-chip:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.45);
+}
+.social-chip svg {
+  display: block;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .text-shimmer, .orb, .marquee__track, .float-soft, .dot-pulse {
     animation: none;
   }
   .reveal { opacity: 1; transform: none; }
+  .social-chip:hover { transform: none; }
+  .btn:hover, .btn:active { transform: none; filter: none; }
 }
